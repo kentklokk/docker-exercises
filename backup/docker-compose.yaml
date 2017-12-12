@@ -1,0 +1,31 @@
+version: '3.1'
+
+volumes:
+  db-data: 
+
+networks:
+  if_wordpress:
+
+services:
+  wordpress_container:
+    image: wordpress
+    ports: 
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: mysql_container
+      WORDPRESS_DB_PASSWORD: wordpress
+    depends_on:
+      - mysql_container
+    restart: always
+    networks:
+      - if_wordpress
+
+  mysql_container:
+      image: mysql 
+      environment:
+        MYSQL_ROOT_PASSWORD: wordpress
+      restart: always
+      networks:
+        - if_wordpress
+      volumes:
+        - db-data:/var/lib/mysql
